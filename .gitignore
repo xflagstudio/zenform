@@ -1,0 +1,11 @@
+# binary
+zenform
+
+# dep vendoring directory
+/vendor
+
+# meta files
+.DS_Store
+
+# VSC workspace config
+.vscode
