@@ -1,9 +1,10 @@
 package config
 
 import (
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const fixture = "../test/fixtures/triggers.csv"
@@ -13,7 +14,7 @@ func TestParseTriggers(t *testing.T) {
 	parser, _ := NewParserFromExtension(".csv")
 	csvStr, _ := ioutil.ReadFile(fixture)
 	conf, err := parser.ParseTriggers(string(csvStr))
-	expectedLength := 53 // number of rows except header in triggers.csv
+	expectedLength := 5 // number of rows except header in triggers.csv
 
 	assert.Nil(err)
 	assert.Equal(len(conf), expectedLength)

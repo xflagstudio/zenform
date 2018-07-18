@@ -1,0 +1,99 @@
+version: 2
+
+defaults: &defaults
+  working_directory: /go/src/github.com/xflagstudio/zenform
+  docker:
+    - image: circleci/golang:1.9
+  
+jobs:
+  checkout_code:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: repo-{{ .Environment.CIRCLE_SHA1 }}
+      - checkout
+      - save_cache:
+          key: repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths: /go/
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  dep_ensure:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          key: deps-{{ checksum "Gopkg.lock" }}
+      - run:
+          name: install golang/dep
+          command: go get -u github.com/golang/dep/cmd/dep
+      - run:
+          name: bundle dependencies
+          command: dep ensure
+      - save_cache:
+          key: deps-{{ checksum "Gopkg.lock" }}
+          paths:
+            - vendor
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  go_test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: run test and output coverage
+          command: |
+            echo "" > coverage.txt
+            for d in $(go list ./... | grep -v vendor); do
+              go test -race -coverprofile=profile.out -covermode=atomic "$d"
+              if [ -f profile.out ]; then
+                cat profile.out >> coverage.txt
+                rm profile.out
+              fi
+            done
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: install gox
+          command: go get github.com/mitchellh/gox
+      - run:
+          name: build binaries
+          command: gox -os="darwin linux windows" -arch="amd64 386" -output="build/{{.OS}}/{{.Arch}}/{{.Dir}}"
+      - store_artifacts:
+          path: /go/src/github.com/xflagstudio/zenform/build
+          destination: build
+
+workflows:
+  version: 2
+  test_and_build:
+    jobs:
+      - checkout_code
+      - dep_ensure:
+          requires:
+            - checkout_code
+      - go_test:
+          requires:
+            - dep_ensure
+      - build:
+          requires:
+            - go_test
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /^v.*/
