@@ -1,9 +1,10 @@
 package config
 
 import (
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const ticketFormsFixture = "../test/fixtures/ticket_forms.csv"
@@ -13,7 +14,7 @@ func TestParseTicketForms(t *testing.T) {
 	parser, _ := NewParserFromExtension(".csv")
 	csvStr, _ := ioutil.ReadFile(ticketFormsFixture)
 	conf, err := parser.ParseTicketForms(string(csvStr))
-	expectedLength := 7 // number of rows except header in ticket_forms.csv
+	expectedLength := 3 // number of rows except header in ticket_forms.csv
 
 	assert.Nil(err)
 	assert.Equal(len(conf), expectedLength)
