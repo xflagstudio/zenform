@@ -69,14 +69,14 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: build binary for macOS
-          command: go build .
-          environment:
-            GOOS: darwin
-            GOARCH: amd64
+          name: install gox
+          command: go get github.com/mitchellh/gox
+      - run:
+          name: build binaries
+          command: gox -os="darwin linux windows" -arch="amd64 386" -output="build/{{.OS}}/{{.Arch}}/{{.Dir}}"
       - store_artifacts:
-          path: /go/src/github.com/xflagstudio/zenform/zenform
-          destination: darwin/amd64/zenform
+          path: /go/src/github.com/xflagstudio/zenform/build
+          destination: build
 
 workflows:
   version: 2
