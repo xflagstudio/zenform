@@ -1,5 +1,6 @@
 # binary
 zenform
+build
 
 # dep vendoring directory
 /vendor
