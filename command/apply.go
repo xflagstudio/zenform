@@ -33,7 +33,7 @@ func applyFunc(cmd *cobra.Command, args []string) {
 	exe := step.NewExecutor()
 	zd, _ := zendesk.NewClient(nil)
 	zfconfig := &config.ZenformConfig{}
-	currentState := NewZenformState()
+	currentState := config.NewZenformState()
 	var conf config.Config
 
 	// If specified zenform project directory path,
@@ -158,7 +158,7 @@ func applyFunc(cmd *cobra.Command, args []string) {
 	})
 }
 
-func stepCreateTicketFields(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
+func stepCreateTicketFields(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *config.ZenformState) func() error {
 	return func() error {
 		for _, ticketField := range conf.TicketFields {
 			if state.ExistsTicketField(ticketField.Slug) {
@@ -194,7 +194,7 @@ func stepCreateTicketFields(exe *step.Executor, zd *zendesk.Client, conf config.
 	}
 }
 
-func stepCreateTicketForms(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
+func stepCreateTicketForms(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *config.ZenformState) func() error {
 	return func() error {
 		for _, ticketForm := range conf.TicketForms {
 			if state.ExistsTicketForm(ticketForm.Slug) {
@@ -235,7 +235,7 @@ func stepCreateTicketForms(exe *step.Executor, zd *zendesk.Client, conf config.C
 	}
 }
 
-func stepCreateTriggers(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
+func stepCreateTriggers(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *config.ZenformState) func() error {
 	return func() error {
 		for _, trigger := range conf.Triggers {
 			if state.ExistsTrigger(trigger.Slug) {

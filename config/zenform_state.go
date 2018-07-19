@@ -1,10 +1,9 @@
-package command
+package config
 
 import (
 	"fmt"
 
 	"github.com/nukosuke/go-zendesk/zendesk"
-	"github.com/xflagstudio/zenform/config"
 )
 
 // map of slug and each resource instance
@@ -54,7 +53,7 @@ func (state ZenformState) ActualActionFieldName(systemFieldTypeOrSlug string) st
 
 // ActualActionFieldValue takes field type and TriggerActionConfig.
 // It returns field value according to field type
-func (state ZenformState) ActualActionFieldValue(fieldType string, triggerAction config.TriggerActionConfig) interface{} {
+func (state ZenformState) ActualActionFieldValue(fieldType string, triggerAction TriggerActionConfig) interface{} {
 	switch fieldType {
 	case "notification_user": // []string
 		return triggerAction.Value
