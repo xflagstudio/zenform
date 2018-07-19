@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"github.com/nukosuke/go-zendesk/zendesk"
-	"github.com/xflagstudio/zenform/config"
 	"github.com/spf13/cobra"
+	"github.com/xflagstudio/zenform/config"
 )
 
 var configFormat string
@@ -24,141 +24,136 @@ var applyCommand = &cobra.Command{
 	Use:   "apply",
 	Short: "Apply configuration to Zendesk",
 	Long:  "Apply configuration to Zendesk",
-	Run: func(cmd *cobra.Command, args []string) {
-		exe := NewStepExecutor()
-		zd, _ := zendesk.NewClient(nil)
-		zfconfig := &config.ZenformConfig{}
-		currentState := NewZenformState()
-		var conf config.Config
+	Run:   applyFunc,
+}
 
-		// If specified zenform project directory path,
-		// `apply` is executed in it.
-		exe.Step("Running apply", func() error {
-			if len(args) > 0 {
-				os.Chdir(args[0])
-			}
-			cwd, _ := os.Getwd()
-			exe.Info("Check into directory: " + cwd)
-			return nil
-		})
+func applyFunc(cmd *cobra.Command, args []string) {
+	exe := NewStepExecutor()
+	zd, _ := zendesk.NewClient(nil)
+	zfconfig := &config.ZenformConfig{}
+	currentState := NewZenformState()
+	var conf config.Config
 
-		exe.Step("Checking zenform config", stepLoadZenformConfig(exe, zfconfig, zd))
-
-		// If zfstate.json exists,
-		// recover last config data as current Zendesk state
-		exe.Step("Checking state file", func() error {
-			if _, err := os.Stat(stateFileName); os.IsNotExist(err) {
-				exe.Info("Not Found")
-				return nil
-			}
-			exe.Success("Found " + stateFileName)
-
-			exe.Step("Loading state", func() error {
-				stateJsonStr, _ := ioutil.ReadFile(stateFileName)
-				err := json.Unmarshal(stateJsonStr, &currentState)
-				if err != nil {
-					exe.Error(err.Error())
-					return err
-				}
-				return nil
-			})
-			return nil
-		})
-
-		// Create parser according to config extension
-		configExtension := "." + configFormat
-		parser, err := config.NewParserFromExtension(configExtension)
-		if err != nil {
-			fmt.Println(err)
-			return
+	// If specified zenform project directory path,
+	// `apply` is executed in it.
+	exe.Step("Running apply", func() error {
+		if len(args) > 0 {
+			os.Chdir(args[0])
 		}
+		cwd, _ := os.Getwd()
+		exe.Info("Check into directory: " + cwd)
+		return nil
+	})
 
-		//TODO: check if all configs exists
-		exe.Step("Detecting config files", func() error {
-			exe.Success("Found (number of files) files")
+	exe.Step("Checking zenform config", stepLoadZenformConfig(exe, zfconfig, zd))
+
+	// If zfstate.json exists,
+	// recover last config data as current Zendesk state
+	exe.Step("Checking state file", func() error {
+		if _, err := os.Stat(stateFileName); os.IsNotExist(err) {
+			exe.Info("Not Found")
 			return nil
-		})
+		}
+		exe.Success("Found " + stateFileName)
 
-		exe.Step("Loading configuration files", func() error {
-
-			exe.Step("Loading ticket_fields"+configExtension, func() error {
-				confText, err := ioutil.ReadFile("./ticket_fields" + configExtension)
-				if err != nil {
-					exe.Error(err.Error())
-					return err
-				}
-				conf.TicketFields, err = parser.ParseTicketFields(string(confText))
-				if err != nil {
-					exe.Error(err.Error())
-					return err
-				}
-				exe.Success("OK")
-				return nil
-			})
-
-			exe.Step("Loading ticket_forms"+configExtension, func() error {
-				confText, err := ioutil.ReadFile("./ticket_forms" + configExtension)
-				if err != nil {
-					exe.Error(err.Error())
-					return err
-				}
-				conf.TicketForms, err = parser.ParseTicketForms(string(confText))
-				if err != nil {
-					exe.Error(err.Error())
-					return err
-				}
-				exe.Success("OK")
-				return nil
-			})
-
-			exe.Step("Loading triggers"+configExtension, func() error {
-				confText, err := ioutil.ReadFile("./triggers" + configExtension)
-				if err != nil {
-					exe.Error(err.Error())
-					return err
-				}
-				conf.Triggers, err = parser.ParseTriggers(string(confText))
-				if err != nil {
-					exe.Error(err.Error())
-					return err
-				}
-				exe.Success("OK")
-				return nil
-			})
-			return nil
-		})
-
-		exe.Step("Applying patch to Zendesk", func() error {
-			if err := exe.StepIf(len(conf.TicketFields) > 0, "Creating ticket fields...", stepCreateTicketFields(exe, zd, conf, currentState)); err != nil {
-				return err
-			}
-			if err := exe.StepIf(len(conf.TicketForms) > 0, "Creating ticket forms...", stepCreateTicketForms(exe, zd, conf, currentState)); err != nil {
-				return err
-			}
-			if err := exe.StepIf(len(conf.Triggers) > 0, "Creating triggers...", stepCreateTriggers(exe, zd, conf, currentState)); err != nil {
-				return err
-			}
-			return nil
-		})
-		// TODO:
-		// - make request
-		// - request Zendesk API
-		// - parse response
-
-		// Write new state file
-		exe.Step("Updating zfstate.json", func() error {
-			jsonStr, err := json.MarshalIndent(currentState, "", "    ") // indent with 4 spaces
+		exe.Step("Loading state", func() error {
+			stateJsonStr, _ := ioutil.ReadFile(stateFileName)
+			err := json.Unmarshal(stateJsonStr, &currentState)
 			if err != nil {
 				exe.Error(err.Error())
 				return err
 			}
-			ioutil.WriteFile(stateFileName, jsonStr, 0644)
-			exe.Success("Done")
+			return nil
+		})
+		return nil
+	})
+
+	// Create parser according to config extension
+	configExtension := "." + configFormat
+	parser, err := config.NewParserFromExtension(configExtension)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	//TODO: check if all configs exists
+	exe.Step("Detecting config files", func() error {
+		exe.Success("Found (number of files) files")
+		return nil
+	})
+
+	exe.Step("Loading configuration files", func() error {
+		exe.Step("Loading ticket_fields"+configExtension, func() error {
+			confText, err := ioutil.ReadFile("./ticket_fields" + configExtension)
+			if err != nil {
+				exe.Error(err.Error())
+				return err
+			}
+			conf.TicketFields, err = parser.ParseTicketFields(string(confText))
+			if err != nil {
+				exe.Error(err.Error())
+				return err
+			}
+			exe.Success("OK")
 			return nil
 		})
 
-		//TODO: output resource changes
-	},
+		exe.Step("Loading ticket_forms"+configExtension, func() error {
+			confText, err := ioutil.ReadFile("./ticket_forms" + configExtension)
+			if err != nil {
+				exe.Error(err.Error())
+				return err
+			}
+			conf.TicketForms, err = parser.ParseTicketForms(string(confText))
+			if err != nil {
+				exe.Error(err.Error())
+				return err
+			}
+			exe.Success("OK")
+			return nil
+		})
+
+		exe.Step("Loading triggers"+configExtension, func() error {
+			confText, err := ioutil.ReadFile("./triggers" + configExtension)
+			if err != nil {
+				exe.Error(err.Error())
+				return err
+			}
+			conf.Triggers, err = parser.ParseTriggers(string(confText))
+			if err != nil {
+				exe.Error(err.Error())
+				return err
+			}
+			exe.Success("OK")
+			return nil
+		})
+		return nil
+	})
+
+	exe.Step("Applying patch to Zendesk", func() error {
+		if err := exe.StepIf(len(conf.TicketFields) > 0, "Creating ticket fields...", stepCreateTicketFields(exe, zd, conf, currentState)); err != nil {
+			return err
+		}
+		if err := exe.StepIf(len(conf.TicketForms) > 0, "Creating ticket forms...", stepCreateTicketForms(exe, zd, conf, currentState)); err != nil {
+			return err
+		}
+		if err := exe.StepIf(len(conf.Triggers) > 0, "Creating triggers...", stepCreateTriggers(exe, zd, conf, currentState)); err != nil {
+			return err
+		}
+		return nil
+	})
+
+	// Write new state file
+	exe.Step("Updating zfstate.json", func() error {
+		jsonStr, err := json.MarshalIndent(currentState, "", "    ") // indent with 4 spaces
+		if err != nil {
+			exe.Error(err.Error())
+			return err
+		}
+		ioutil.WriteFile(stateFileName, jsonStr, 0644)
+		exe.Success("Done")
+		return nil
+	})
 }
 
 func stepCreateTicketFields(exe *StepExecutor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
