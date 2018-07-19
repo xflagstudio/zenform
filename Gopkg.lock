@@ -35,7 +35,7 @@
   branch = "master"
   name = "github.com/nukosuke/go-zendesk"
   packages = ["zendesk"]
-  revision = "4e850cb76013134af4c0696db766c796391be056"
+  revision = "5bc85bb81f8bf3b0552e575dfba2bbdb18061048"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
