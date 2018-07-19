@@ -1,17 +1,18 @@
-package command
+package common
 
 import (
 	"io/ioutil"
 	"os"
 
 	"github.com/nukosuke/go-zendesk/zendesk"
+	"github.com/xflagstudio/zenform/command/step"
 	"github.com/xflagstudio/zenform/config"
 	"gopkg.in/yaml.v2"
 )
 
 const zenformConfigFileName = "zenform.yml"
 
-func stepLoadZenformConfig(exe *StepExecutor, zfconfig *config.ZenformConfig, zd *zendesk.Client) func() error {
+func StepLoadZenformConfig(exe *step.Executor, zfconfig *config.ZenformConfig, zd *zendesk.Client) func() error {
 	return func() error {
 		if _, err := os.Stat(zenformConfigFileName); os.IsNotExist(err) {
 			exe.Error(zenformConfigFileName + " Not Found")
