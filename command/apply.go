@@ -9,6 +9,8 @@ import (
 
 	"github.com/nukosuke/go-zendesk/zendesk"
 	"github.com/spf13/cobra"
+	"github.com/xflagstudio/zenform/command/common"
+	"github.com/xflagstudio/zenform/command/step"
 	"github.com/xflagstudio/zenform/config"
 )
 
@@ -28,7 +30,7 @@ var applyCommand = &cobra.Command{
 }
 
 func applyFunc(cmd *cobra.Command, args []string) {
-	exe := NewStepExecutor()
+	exe := step.NewExecutor()
 	zd, _ := zendesk.NewClient(nil)
 	zfconfig := &config.ZenformConfig{}
 	currentState := NewZenformState()
@@ -45,7 +47,7 @@ func applyFunc(cmd *cobra.Command, args []string) {
 		return nil
 	})
 
-	exe.Step("Checking zenform config", stepLoadZenformConfig(exe, zfconfig, zd))
+	exe.Step("Checking zenform config", common.StepLoadZenformConfig(exe, zfconfig, zd))
 
 	// If zfstate.json exists,
 	// recover last config data as current Zendesk state
@@ -156,7 +158,7 @@ func applyFunc(cmd *cobra.Command, args []string) {
 	})
 }
 
-func stepCreateTicketFields(exe *StepExecutor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
+func stepCreateTicketFields(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
 	return func() error {
 		for _, ticketField := range conf.TicketFields {
 			if state.ExistsTicketField(ticketField.Slug) {
@@ -192,7 +194,7 @@ func stepCreateTicketFields(exe *StepExecutor, zd *zendesk.Client, conf config.C
 	}
 }
 
-func stepCreateTicketForms(exe *StepExecutor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
+func stepCreateTicketForms(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
 	return func() error {
 		for _, ticketForm := range conf.TicketForms {
 			if state.ExistsTicketForm(ticketForm.Slug) {
@@ -233,7 +235,7 @@ func stepCreateTicketForms(exe *StepExecutor, zd *zendesk.Client, conf config.Co
 	}
 }
 
-func stepCreateTriggers(exe *StepExecutor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
+func stepCreateTriggers(exe *step.Executor, zd *zendesk.Client, conf config.Config, state *ZenformState) func() error {
 	return func() error {
 		for _, trigger := range conf.Triggers {
 			if state.ExistsTrigger(trigger.Slug) {

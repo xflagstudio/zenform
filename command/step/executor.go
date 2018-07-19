@@ -1,24 +1,29 @@
-package command
+package step
 
 import (
 	"fmt"
-	"github.com/fatih/color"
 	"strings"
+
+	"github.com/fatih/color"
 )
 
-type StepExecutor struct {
+// Executor runs steps sequentially by Step method and manage step nest level
+//   to pretty print the result.
+type Executor struct {
 	indentLevel int
 	padding     string
 }
 
-func NewStepExecutor() *StepExecutor {
-	return &StepExecutor{
+// NewExecutor creates initialized Executor instance.
+func NewExecutor() *Executor {
+	return &Executor{
 		indentLevel: 0,
 		padding:     "    ", // padding left spaces
 	}
 }
 
-func (exe *StepExecutor) Step(msgOnStart string, stepFunc func() error) error {
+// Step executes stepFunc and returns its result.
+func (exe *Executor) Step(msgOnStart string, stepFunc func() error) error {
 	// switch arrow type
 	var arrow string
 	if exe.indentLevel == 0 {
@@ -41,21 +46,22 @@ func (exe *StepExecutor) Step(msgOnStart string, stepFunc func() error) error {
 	return nil
 }
 
-func (exe *StepExecutor) StepIf(condition bool, msgOnStart string, stepFunc func() error) error {
+// StepIf is conditional execution of step. If condition is false, this step will be skipped.
+func (exe *Executor) StepIf(condition bool, msgOnStart string, stepFunc func() error) error {
 	if !condition {
 		return nil
 	}
 	return exe.Step(msgOnStart, stepFunc)
 }
 
-func (exe *StepExecutor) Info(msg string) {
+func (exe *Executor) Info(msg string) {
 	fmt.Println(strings.Repeat(exe.padding, exe.indentLevel) + msg)
 }
 
-func (exe *StepExecutor) Error(msg string) {
+func (exe *Executor) Error(msg string) {
 	color.Red(strings.Repeat(exe.padding, exe.indentLevel) + msg)
 }
 
-func (exe *StepExecutor) Success(msg string) {
+func (exe *Executor) Success(msg string) {
 	color.Green(strings.Repeat(exe.padding, exe.indentLevel) + msg)
 }
