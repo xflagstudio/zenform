@@ -35,7 +35,7 @@ func NewZenformState() *ZenformState {
 // If given field name is NOT system defined type, fetch custom field from ZenformState,
 //   and make field name represented by `custom_fields_<id>`
 func (state ZenformState) ActualConditionFieldName(systemFieldTypeOrSlug string) string {
-	if SystemConditionFieldTypes.Include(systemFieldTypeOrSlug) {
+	if zendesk.SystemConditionFieldTypes.Include(systemFieldTypeOrSlug) {
 		return systemFieldTypeOrSlug
 	}
 	return fmt.Sprintf("custom_fields_%d", state.TicketFields[systemFieldTypeOrSlug].ID)
@@ -46,7 +46,7 @@ func (state ZenformState) ActualConditionFieldName(systemFieldTypeOrSlug string)
 // If given field name is NOT system defined type, fetch custom field from ZenformState,
 //   and make field name represented by `custom_fields_<id>`
 func (state ZenformState) ActualActionFieldName(systemFieldTypeOrSlug string) string {
-	if SystemActionFieldTypes.Include(systemFieldTypeOrSlug) {
+	if zendesk.SystemActionFieldTypes.Include(systemFieldTypeOrSlug) {
 		return systemFieldTypeOrSlug
 	}
 	return fmt.Sprintf("custom_fields_%d", state.TicketFields[systemFieldTypeOrSlug].ID)
