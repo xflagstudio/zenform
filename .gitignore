@@ -1,0 +1,8 @@
+# ruby, jekyll
+.bundle/
+vendor/
+_site/
+
+# binary from master
+zenform
+
