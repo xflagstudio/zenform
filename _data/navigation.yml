@@ -1,0 +1,24 @@
+main:
+  - title: Docs
+    url: /docs/
+
+# docs sidebar
+docs:
+  - title: Getting Started
+    children:
+      - title: Installation
+        url: /docs/
+  - title: Configuration
+    children:
+      - title: Credentials
+        url: /docs/configuration/
+      - title: Ticket Field
+        url: /docs/configuration/ticket-field/
+      - title: Ticket Form
+        url: /docs/configuration/ticket-form/
+      - title: Trigger
+        url: /docs/configuration/trigger/
+  - title: Commands
+    children:
+      - title: apply
+        url: /docs/commands/apply/
