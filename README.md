@@ -3,7 +3,7 @@
 [![CircleCI](https://circleci.com/gh/xflagstudio/zenform/tree/master.svg?style=svg)](https://circleci.com/gh/xflagstudio/zenform/tree/master)
 
   zenform is a CLI tool to provision Zendesk instance automatically.
-  It sends requests to Zendesk API based on your configuration files without manual operation on web interface.
+  It sends requests to Zendesk API based on your configuration files so that you can set up your Zendesk instance without manual operation on the web interface.
 
   See the document for details.
 
