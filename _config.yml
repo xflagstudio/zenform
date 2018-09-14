@@ -16,13 +16,10 @@
 title: zenform
 email: yosuke.tamura+zenform@mixi.co.jp
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  zenform is a CLI tool to provision Zendesk instance automatically.
+  It sends requests to Zendesk API based on your configuration files so that you can set up your Zendesk instance without manual operation on the web interface.
 baseurl: "/zenform" # the subpath of your site, e.g. /blog
 url: "https://xflagstudio.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: xflag_engineers
-github_username:  xflagstudio
 repository: xflagstudio/zenform
 
 # Build settings
@@ -33,7 +30,7 @@ plugins:
   - jemoji
   - jekyll-mentions
   - jekyll-seo-tag
-  - jekyll-sitemap
+  - jekyll-sitemapgithub
   - jekyll-feed
 
 include:
@@ -73,3 +70,15 @@ defaults:
 
 # site search
 search: true
+
+footer:
+  links:
+  - label: "Twitter"
+    icon: "fab fa-fw fa-twitter-square"
+    url: "https://twitter.com/xflag_engineers"
+  - label: "GitHub"
+    icon: "fab fa-fw fa-github"
+    url: "https://github.com/xflagstudio/zenform"
+  - label: "Medium"
+    icon: "fab fa-fw fa-medium"
+    url: "https://medium.com/mixi-developers"
