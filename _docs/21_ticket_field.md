@@ -18,7 +18,7 @@ Configuration format for Ticket Field.
 | `editable_in_portal`          | boolean<br/>( `"TRUE"` \| `"FALSE"` ) | Whether the ticket field is editable on portal site       |
 | `required_in_portal`          | boolean<br/>( `"TRUE"` \| `"FALSE"` ) | Whether the ticket field is mandatory item on portal site |
 | `description`                 | string                                | Description of the ticket field                           |
-| `custom_field_options.names`  | []string                              | option name to custom                                     |
+| `custom_field_options.names`  | []string                              | Option name to custom                                     |
 | `custom_field_options.values` | []string                              | Option value to custom                                    |
 
 {: .notice--info}
