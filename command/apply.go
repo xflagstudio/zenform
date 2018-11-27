@@ -10,10 +10,10 @@ import (
 	"github.com/xflagstudio/zenform/config"
 )
 
-var configFormat string
+var inputFormat string
 
 func init() {
-	applyCommand.Flags().StringVarP(&configFormat, "format", "f", "csv", "Configuration file format. Only \"csv\" is supported currently.")
+	applyCommand.Flags().StringVarP(&inputFormat, "format", "f", "csv", "Configuration file format. Only \"csv\" is supported currently.")
 }
 
 var applyCommand = &cobra.Command{
@@ -51,7 +51,7 @@ func applyFunc(cmd *cobra.Command, args []string) {
 	}
 
 	// Create parser according to config extension
-	configExtension := "." + configFormat
+	configExtension := "." + inputFormat
 	parser, err := config.NewParserFromExtension(configExtension)
 	if err != nil {
 		fmt.Println(err)
