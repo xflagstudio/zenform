@@ -42,12 +42,12 @@
   version = "v0.0.4"
 
 [[projects]]
-  branch = "master"
-  digest = "1:34dde4e8d3a88fd3aed23913b407afbeb7a2d03ef9fea09f5e484c0d3b2d7a3d"
+  digest = "1:3eb372a83200b0609e8772fce23ea34f3a17b259ad377e04b82db32d4f462967"
   name = "github.com/nukosuke/go-zendesk"
   packages = ["zendesk"]
   pruneopts = ""
-  revision = "212e59afe4c02fa790b3e9cdb3e6dba2c8b74e0d"
+  revision = "d97ccb294ab64218716e82763350f297b88f6217"
+  version = "v0.0.0"
 
 [[projects]]
   digest = "1:256484dbbcd271f9ecebc6795b2df8cad4c458dd0f5fd82a8c2fa0c29f233411"
