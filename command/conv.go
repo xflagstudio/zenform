@@ -13,17 +13,17 @@ import (
 var inputFormat string
 
 func init() {
-	applyCommand.Flags().StringVarP(&inputFormat, "format", "f", "csv", "Configuration file format. Only \"csv\" is supported currently.")
+	convCommand.Flags().StringVarP(&inputFormat, "format", "f", "csv", "Configuration file format. Only \"csv\" is supported currently.")
 }
 
-var applyCommand = &cobra.Command{
-	Use:   "apply",
-	Short: "Apply configuration to Zendesk",
-	Long:  "Apply configuration to Zendesk",
-	Run:   applyFunc,
+var convCommand = &cobra.Command{
+	Use:   "conv",
+	Short: "Convert input configuration to other format",
+	Long:  "Convert input configuration to other format",
+	Run:   convFunc,
 }
 
-func applyFunc(cmd *cobra.Command, args []string) {
+func convFunc(cmd *cobra.Command, args []string) {
 	ticketFieldTmpl, err := template.New("ticket_field").Parse(config.TicketFieldHCL)
 	if err != nil {
 		fmt.Errorf("Failed to load HCL template: ticket_field")
