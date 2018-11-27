@@ -27,15 +27,3 @@
 [[constraint]]
   name = "github.com/stretchr/testify"
   version = "1.2.1"
-
-[[constraint]]
-  name = "github.com/fatih/color"
-  version = "1.7.0"
-
-[[constraint]]
-  name = "github.com/nukosuke/go-zendesk"
-  version = "0.0.0"
-
-[[constraint]]
-  name = "gopkg.in/yaml.v2"
-  version = "2.2.1"
