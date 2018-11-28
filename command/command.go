@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +20,7 @@ func init() {
 	cobra.OnInitialize()
 
 	RootCommand.AddCommand(versionCommand)
-	RootCommand.AddCommand(applyCommand)
+	RootCommand.AddCommand(convCommand)
 }
 
 var versionCommand = &cobra.Command{

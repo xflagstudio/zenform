@@ -2,8 +2,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![CircleCI](https://circleci.com/gh/xflagstudio/zenform/tree/master.svg?style=svg)](https://circleci.com/gh/xflagstudio/zenform/tree/master)
 
-  zenform is a CLI tool to provision Zendesk instance automatically.
-  It sends requests to Zendesk API based on your configuration files so that you can set up your Zendesk instance without manual operation on the web interface.
+  zenform is a CLI tool to provision Zendesk instance.
+  It converts your configuration files to HCL so that you can set up your Zendesk instance with [terraform-provider-zendesk](https://github.com/nukosuke/terraform-provider-zendesk).
 
   See the document for details.
 
