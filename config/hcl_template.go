@@ -5,7 +5,7 @@ const TicketFieldHCL = `# {{.FileName}}.tf
 #   This file is generated from {{.FileName}}.csv
 {{range .TicketFields}}
 resource "zendesk_ticket_field" "{{.Slug}}" {
-  name               = "{{.Title}}"
+  title              = "{{.Title}}"
   type               = "{{.Type}}"
   description        = "{{.Description}}"
   visible_in_portal  = {{if eq .VisibleInPortal "TRUE"}}true{{else}}false{{end}}
