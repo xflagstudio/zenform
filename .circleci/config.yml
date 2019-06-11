@@ -90,7 +90,7 @@ workflows:
             - checkout_code
       - go_test:
           requires:
-            - dep_ensure
+            - go_mod
       - build:
           requires:
             - go_test
