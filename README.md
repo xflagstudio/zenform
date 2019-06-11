@@ -5,9 +5,16 @@
   zenform is a CLI tool to provision Zendesk instance.
   It converts your configuration files to HCL so that you can set up your Zendesk instance with [terraform-provider-zendesk](https://github.com/nukosuke/terraform-provider-zendesk).
 
-  See the document for details.
+## Usage
 
-  - [Document](https://xflagstudio.github.io/zenform/)
+```sh
+$ zenform conv input.csv > resources.tf
+
+# Terraform with terraform-provider-zendesk
+$ terraform init
+$ terraform plan
+$ terraform apply
+```
 
 ## License
 
