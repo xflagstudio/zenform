@@ -8,7 +8,10 @@
 ## Usage
 
 ```sh
-$ zenform conv input.csv > resources.tf
+$ ls
+ticket_fields.csv  ticket_forms.csv  triggers.csv
+
+$ zenform conv > resources.tf
 
 # Terraform with terraform-provider-zendesk
 $ terraform init
