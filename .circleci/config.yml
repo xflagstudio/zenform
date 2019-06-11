@@ -3,8 +3,10 @@ version: 2
 defaults: &defaults
   working_directory: /go/src/github.com/xflagstudio/zenform
   docker:
-    - image: circleci/golang:1.10
-  
+    - image: circleci/golang:1.12
+      environment:
+        GO111MODULE: "on"
+
 jobs:
   checkout_code:
     <<: *defaults
@@ -14,29 +16,29 @@ jobs:
       - checkout
       - save_cache:
           key: repo-{{ .Environment.CIRCLE_SHA1 }}
-          paths: /go/
+          paths: /go/src/github.com/xflagstudio/zenform
       - persist_to_workspace:
           root: .
           paths:
             - .
 
-  dep_ensure:
+  go_mod:
     <<: *defaults
     steps:
       - attach_workspace:
           at: .
       - restore_cache:
-          key: deps-{{ checksum "Gopkg.lock" }}
+          key: deps-{{ checksum "gomod.sum" }}
       - run:
-          name: install golang/dep
-          command: go get -u github.com/golang/dep/cmd/dep
+          name: go mod tidy
+          command: go mod tidy
       - run:
-          name: bundle dependencies
-          command: dep ensure
+          name: go mod download
+          command: go mod download
       - save_cache:
-          key: deps-{{ checksum "Gopkg.lock" }}
+          key: deps-{{ checksum "gomod.sum" }}
           paths:
-            - vendor
+            - /go/pkg/mod
       - persist_to_workspace:
           root: .
           paths:
@@ -83,7 +85,7 @@ workflows:
   test_and_build:
     jobs:
       - checkout_code
-      - dep_ensure:
+      - go_mod:
           requires:
             - checkout_code
       - go_test:
