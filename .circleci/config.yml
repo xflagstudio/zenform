@@ -4,6 +4,9 @@ defaults: &defaults
   working_directory: /go/src/github.com/xflagstudio/zenform
   docker:
     - image: circleci/golang:1.12
+      auth:
+        username: $DOCKERHUB_USERNAME
+        password: $DOCKERHUB_PASSWORD
       environment:
         GO111MODULE: "on"
 
